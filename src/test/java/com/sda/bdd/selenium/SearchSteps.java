@@ -2,6 +2,7 @@ package com.sda.bdd.selenium;
 
 
 import io.cucumber.java.After;
+import io.cucumber.java.Before;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -15,11 +16,17 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 public class SearchSteps {
 
 
-    private final WebDriver driver;
+    private WebDriver driver;
 
-    public SearchSteps() {
+    @Before
+    public void prepareWebDriver() {
         System.setProperty("webdriver.chrome.driver", "c:\\workspace\\tools\\chromedriver.exe");
         driver = new ChromeDriver();
+    }
+
+    @After()
+    public void closeBrowser() {
+        driver.quit();
     }
 
     @Given("I am on the Google search page")
@@ -42,10 +49,5 @@ public class SearchSteps {
         // Wait for the page to load timeout after ten seconds
         new WebDriverWait(driver, 10L)
             .until((ExpectedCondition<Boolean>) d -> d.getTitle().toLowerCase().startsWith(titleStartsWith));
-    }
-
-    @After()
-    public void closeBrowser() {
-        driver.quit();
     }
 }
